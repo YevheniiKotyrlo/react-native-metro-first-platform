@@ -1,8 +1,26 @@
 # react-native-metro-first-platform
 
-![Build](https://github.com/YevheniiKotyrlo/react-native-metro-first-platform/workflows/Pre%20Merge%20Checks/badge.svg)
+Without a Babel config file in the project, one Metro server gives the second platform it bundles the first platform's `Platform.OS`.
 
-This is your new React Native Reproducer project.
+`NoBabelConfigApp/` is an app with no `.babelrc` or `babel.config.js`: `index.js` registers `App.js`, which reads `Platform.OS` into `bundledFor` and renders it. `metro.config.js` is the template's. `package.json` pins `react-native` and `@react-native/*` to `0.90.0-nightly-20261116-a1b2862a5`.
+
+```sh
+cd NoBabelConfigApp
+bash repro.sh          # the nightly package.json pins
+bash repro.sh 0.88.1   # react-native, @react-native/metro-config and @react-native/babel-preset at 0.88.1
+```
+
+`repro.sh` runs `npm install`, then `node repro.js <platforms>` six times. Each `repro.js` run starts one Metro server from `metro.config.js` (Metro as `@react-native/community-cli-plugin` loads it, default `maxWorkers`, transform cache off), requests `/index.bundle?platform=<p>&dev=true&minify=false` for each platform in order, and prints what `bundledFor` is in each bundle:
+
+1. `ios,android` and `android,ios`: both platforms from one server.
+2. `ios` and `android`: each platform alone.
+3. `ios,android` and `android,ios` again with the template's `babel.config.js` written into the folder.
+
+It exits 1 while a bundle from step 1 carries the other platform's `Platform.OS`, 0 once each carries its own, and 2 when a step fails or a run in steps 2 or 3 does not pass.
+
+`ReproducerApp/` is the template's app, unchanged.
+
+---
 
 # Reproducer TODO list
 

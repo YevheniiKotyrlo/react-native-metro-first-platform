@@ -1,0 +1,12 @@
+{
+  "name": "metro-platform-per-bundle",
+  "private": true,
+  "dependencies": {
+    "@react-native/metro-config": "0.90.0-nightly-20261116-a1b2862a5",
+    "react": "19.3.0",
+    "react-native": "0.90.0-nightly-20261116-a1b2862a5"
+  },
+  "devDependencies": {
+    "@react-native/babel-preset": "0.90.0-nightly-20261116-a1b2862a5"
+  }
+}
